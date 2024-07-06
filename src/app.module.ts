@@ -1,10 +1,22 @@
+// src/app.module.ts
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from './prisma/prisma.module';
+import { SupabaseModule } from './supabase/supabase.module';
+import { RecurringMessagesModule } from './recurring-messages/recurring-messages.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    ScheduleModule.forRoot(),
+    PrismaModule,
+    SupabaseModule,
+    RecurringMessagesModule,
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
