@@ -28,25 +28,25 @@ export class RecurringMessagesService {
     if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-    
+
     try {
-      const response = await fetch(`${process.env.MESSAGE_SERVER}/api/v1/chat/new?password=Hyperfan2024`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "addresses": [user.phone],
-            "message": `Hey, daysoftheyear here. Reminder that today is ${contact.name}'s birthday! They're turning ${age}.`
-        }),
-      });
 
-      if (!response.ok) {
-        throw new Error(`Failed to send message: ${response.statusText}`);
-      }
+        const response = await fetch(`${process.env.MESSAGE_SERVER}/api/v1/chat/new?password=Hyperfan2024`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            addresses: [user.phone],
+            message: `Hey, there. just a reminder that today is ${contact.name}'s birthday. They're turning ${age}.`,
+          }),
+        });
 
-      this.logger.log(`Successfully sent birthday message to ${user.name} for ${contact.name}`);
-            
+        if (!response.ok) {
+          throw new Error(`Failed to send message: ${response.statusText}`);
+        }
+
+
     } catch (error) {
       this.logger.error(`Error sending message to ${user.name} for ${contact.name}`, error);
 
@@ -54,7 +54,7 @@ export class RecurringMessagesService {
         from: 'info@daysoftheyear.me',
         to: 'areebk@umich.edu, anniesha51@gmail.com',
         subject: 'Message failed to send!',
-        html: `<p>Error: daysoftheyear didn't send a birthday message to <strong>${contact.name} for user ${user.name}</strong>!</p><p>Error details: ${error.message}</p>`
+        html: `<p>Error: daysoftheyear didn't send a birthday message to <strong>${contact.name} for user ${user.name}</strong>!</p><p>Error details: ${error.message}</p>`,
       });
 
       this.logger.log(`Notification email sent for failed message to ${user.name} for ${contact.name}`);
@@ -69,6 +69,7 @@ export class RecurringMessagesService {
     } else {
       this.logger.log(`No cached birthdays found for key: ${dateKey}`);
     }
+    this.logger.log(`cached data: ${cachedData}`);
     return cachedData ? JSON.parse(cachedData) : null;
   }
 
@@ -79,7 +80,7 @@ export class RecurringMessagesService {
     });
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_MINUTE)
   async sendMorningMessage() {
     const today = new Date();
     const todayKey = `birthdays:${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
@@ -90,40 +91,28 @@ export class RecurringMessagesService {
 
     if (!users) {
       this.logger.log(`No cached birthdays found. Querying database for today's birthdays.`);
-      users = await this.prisma.user.findMany({
-        where: {
-          timeZone: { not: null },
-          contacts: {
-            some: {
-              birthday: {
-                gte: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0),
-                lt: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 0, 0, 0),
-              },
-            },
-          },
-        },
-        include: {
-          contacts: {
-            where: {
-              birthday: {
-                gte: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0),
-                lt: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 0, 0, 0),
-              },
-            },
-          },
-        },
-      });
+      users = await this.prisma.$queryRaw`
+        SELECT *
+        FROM "User"
+        WHERE EXISTS (
+          SELECT 1
+          FROM "Contact"
+          WHERE "Contact"."userId" = "User"."id"
+          AND EXTRACT(MONTH FROM "Contact"."birthday") = ${today.getMonth() + 1}
+          AND EXTRACT(DAY FROM "Contact"."birthday") = ${today.getDate()}
+        )
+      `;
 
       await this.cacheBirthdays(todayKey, users);
     }
 
     for (const user of users) {
       const userTime = moment().tz(user.timeZone);
-      if (userTime.hour() === 10) { // Assuming 10 AM is the desired morning time
+      if (userTime.hour() === 17) { // Assuming 10 AM is the desired morning time
         for (const contact of user.contacts) {
           this.logger.log(`Sending birthday notification to ${user.name} for ${contact.name}'s birthday`);
           await this.sendTextMessage(user, contact);
-        }      
+        }
       }
     }
 

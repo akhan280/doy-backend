@@ -7,7 +7,7 @@ import { UpdateRecurringMessageDto } from './dto/update-recurring-message.dto';
 export class RecurringMessagesController {
   constructor(private readonly recurringMessagesService: RecurringMessagesService) {}
 
-  @Post()
+  @Get()
   sendHourlyMessage() {
     return this.recurringMessagesService.sendMorningMessage();
   }
