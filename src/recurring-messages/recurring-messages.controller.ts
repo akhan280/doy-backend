@@ -9,7 +9,7 @@ export class RecurringMessagesController {
 
   @Get()
   sendHourlyMessage() {
-    return this.recurringMessagesService.sendMorningMessage();
+    return this.recurringMessagesService.processBirthdayMessages();
   }
 
 }

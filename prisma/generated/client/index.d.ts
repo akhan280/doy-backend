@@ -23,6 +23,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  * 
  */
 export type Contact = $Result.DefaultSelection<Prisma.$ContactPayload>
+/**
+ * Model MessagePreferences
+ * 
+ */
+export type MessagePreferences = $Result.DefaultSelection<Prisma.$MessagePreferencesPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -165,6 +170,16 @@ export class PrismaClient<
     * ```
     */
   get contact(): Prisma.ContactDelegate<ExtArgs>;
+
+  /**
+   * `prisma.messagePreferences`: Exposes CRUD operations for the **MessagePreferences** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MessagePreferences
+    * const messagePreferences = await prisma.messagePreferences.findMany()
+    * ```
+    */
+  get messagePreferences(): Prisma.MessagePreferencesDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -643,7 +658,8 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
-    Contact: 'Contact'
+    Contact: 'Contact',
+    MessagePreferences: 'MessagePreferences'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -659,7 +675,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "contact"
+      modelProps: "user" | "contact" | "messagePreferences"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -800,6 +816,76 @@ export namespace Prisma {
           count: {
             args: Prisma.ContactCountArgs<ExtArgs>
             result: $Utils.Optional<ContactCountAggregateOutputType> | number
+          }
+        }
+      }
+      MessagePreferences: {
+        payload: Prisma.$MessagePreferencesPayload<ExtArgs>
+        fields: Prisma.MessagePreferencesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MessagePreferencesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePreferencesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MessagePreferencesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePreferencesPayload>
+          }
+          findFirst: {
+            args: Prisma.MessagePreferencesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePreferencesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MessagePreferencesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePreferencesPayload>
+          }
+          findMany: {
+            args: Prisma.MessagePreferencesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePreferencesPayload>[]
+          }
+          create: {
+            args: Prisma.MessagePreferencesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePreferencesPayload>
+          }
+          createMany: {
+            args: Prisma.MessagePreferencesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MessagePreferencesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePreferencesPayload>[]
+          }
+          delete: {
+            args: Prisma.MessagePreferencesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePreferencesPayload>
+          }
+          update: {
+            args: Prisma.MessagePreferencesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePreferencesPayload>
+          }
+          deleteMany: {
+            args: Prisma.MessagePreferencesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MessagePreferencesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MessagePreferencesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePreferencesPayload>
+          }
+          aggregate: {
+            args: Prisma.MessagePreferencesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMessagePreferences>
+          }
+          groupBy: {
+            args: Prisma.MessagePreferencesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MessagePreferencesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MessagePreferencesCountArgs<ExtArgs>
+            result: $Utils.Optional<MessagePreferencesCountAggregateOutputType> | number
           }
         }
       }
@@ -1175,6 +1261,7 @@ export namespace Prisma {
     stripeId?: boolean
     email?: boolean
     contacts?: boolean | User$contactsArgs<ExtArgs>
+    messagePreferences?: boolean | User$messagePreferencesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1200,6 +1287,7 @@ export namespace Prisma {
 
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contacts?: boolean | User$contactsArgs<ExtArgs>
+    messagePreferences?: boolean | User$messagePreferencesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1208,6 +1296,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       contacts: Prisma.$ContactPayload<ExtArgs>[]
+      messagePreferences: Prisma.$MessagePreferencesPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1582,6 +1671,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     contacts<T extends User$contactsArgs<ExtArgs> = {}>(args?: Subset<T, User$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContactPayload<ExtArgs>, T, "findMany"> | Null>
+    messagePreferences<T extends User$messagePreferencesArgs<ExtArgs> = {}>(args?: Subset<T, User$messagePreferencesArgs<ExtArgs>>): Prisma__MessagePreferencesClient<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1949,6 +2039,21 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ContactScalarFieldEnum | ContactScalarFieldEnum[]
+  }
+
+  /**
+   * User.messagePreferences
+   */
+  export type User$messagePreferencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+    where?: MessagePreferencesWhereInput
   }
 
   /**
@@ -2934,6 +3039,997 @@ export namespace Prisma {
 
 
   /**
+   * Model MessagePreferences
+   */
+
+  export type AggregateMessagePreferences = {
+    _count: MessagePreferencesCountAggregateOutputType | null
+    _avg: MessagePreferencesAvgAggregateOutputType | null
+    _sum: MessagePreferencesSumAggregateOutputType | null
+    _min: MessagePreferencesMinAggregateOutputType | null
+    _max: MessagePreferencesMaxAggregateOutputType | null
+  }
+
+  export type MessagePreferencesAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type MessagePreferencesSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type MessagePreferencesMinAggregateOutputType = {
+    id: number | null
+    daysAhead0: boolean | null
+    daysAhead1: boolean | null
+    daysAhead2: boolean | null
+    daysAhead3: boolean | null
+    daysAhead7: boolean | null
+    userId: string | null
+  }
+
+  export type MessagePreferencesMaxAggregateOutputType = {
+    id: number | null
+    daysAhead0: boolean | null
+    daysAhead1: boolean | null
+    daysAhead2: boolean | null
+    daysAhead3: boolean | null
+    daysAhead7: boolean | null
+    userId: string | null
+  }
+
+  export type MessagePreferencesCountAggregateOutputType = {
+    id: number
+    daysAhead0: number
+    daysAhead1: number
+    daysAhead2: number
+    daysAhead3: number
+    daysAhead7: number
+    userId: number
+    _all: number
+  }
+
+
+  export type MessagePreferencesAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type MessagePreferencesSumAggregateInputType = {
+    id?: true
+  }
+
+  export type MessagePreferencesMinAggregateInputType = {
+    id?: true
+    daysAhead0?: true
+    daysAhead1?: true
+    daysAhead2?: true
+    daysAhead3?: true
+    daysAhead7?: true
+    userId?: true
+  }
+
+  export type MessagePreferencesMaxAggregateInputType = {
+    id?: true
+    daysAhead0?: true
+    daysAhead1?: true
+    daysAhead2?: true
+    daysAhead3?: true
+    daysAhead7?: true
+    userId?: true
+  }
+
+  export type MessagePreferencesCountAggregateInputType = {
+    id?: true
+    daysAhead0?: true
+    daysAhead1?: true
+    daysAhead2?: true
+    daysAhead3?: true
+    daysAhead7?: true
+    userId?: true
+    _all?: true
+  }
+
+  export type MessagePreferencesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MessagePreferences to aggregate.
+     */
+    where?: MessagePreferencesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessagePreferences to fetch.
+     */
+    orderBy?: MessagePreferencesOrderByWithRelationInput | MessagePreferencesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MessagePreferencesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessagePreferences from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessagePreferences.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MessagePreferences
+    **/
+    _count?: true | MessagePreferencesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MessagePreferencesAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MessagePreferencesSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MessagePreferencesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MessagePreferencesMaxAggregateInputType
+  }
+
+  export type GetMessagePreferencesAggregateType<T extends MessagePreferencesAggregateArgs> = {
+        [P in keyof T & keyof AggregateMessagePreferences]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMessagePreferences[P]>
+      : GetScalarType<T[P], AggregateMessagePreferences[P]>
+  }
+
+
+
+
+  export type MessagePreferencesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessagePreferencesWhereInput
+    orderBy?: MessagePreferencesOrderByWithAggregationInput | MessagePreferencesOrderByWithAggregationInput[]
+    by: MessagePreferencesScalarFieldEnum[] | MessagePreferencesScalarFieldEnum
+    having?: MessagePreferencesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MessagePreferencesCountAggregateInputType | true
+    _avg?: MessagePreferencesAvgAggregateInputType
+    _sum?: MessagePreferencesSumAggregateInputType
+    _min?: MessagePreferencesMinAggregateInputType
+    _max?: MessagePreferencesMaxAggregateInputType
+  }
+
+  export type MessagePreferencesGroupByOutputType = {
+    id: number
+    daysAhead0: boolean
+    daysAhead1: boolean
+    daysAhead2: boolean
+    daysAhead3: boolean
+    daysAhead7: boolean
+    userId: string
+    _count: MessagePreferencesCountAggregateOutputType | null
+    _avg: MessagePreferencesAvgAggregateOutputType | null
+    _sum: MessagePreferencesSumAggregateOutputType | null
+    _min: MessagePreferencesMinAggregateOutputType | null
+    _max: MessagePreferencesMaxAggregateOutputType | null
+  }
+
+  type GetMessagePreferencesGroupByPayload<T extends MessagePreferencesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MessagePreferencesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MessagePreferencesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MessagePreferencesGroupByOutputType[P]>
+            : GetScalarType<T[P], MessagePreferencesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MessagePreferencesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    daysAhead0?: boolean
+    daysAhead1?: boolean
+    daysAhead2?: boolean
+    daysAhead3?: boolean
+    daysAhead7?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messagePreferences"]>
+
+  export type MessagePreferencesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    daysAhead0?: boolean
+    daysAhead1?: boolean
+    daysAhead2?: boolean
+    daysAhead3?: boolean
+    daysAhead7?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messagePreferences"]>
+
+  export type MessagePreferencesSelectScalar = {
+    id?: boolean
+    daysAhead0?: boolean
+    daysAhead1?: boolean
+    daysAhead2?: boolean
+    daysAhead3?: boolean
+    daysAhead7?: boolean
+    userId?: boolean
+  }
+
+  export type MessagePreferencesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MessagePreferencesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $MessagePreferencesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MessagePreferences"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      daysAhead0: boolean
+      daysAhead1: boolean
+      daysAhead2: boolean
+      daysAhead3: boolean
+      daysAhead7: boolean
+      userId: string
+    }, ExtArgs["result"]["messagePreferences"]>
+    composites: {}
+  }
+
+  type MessagePreferencesGetPayload<S extends boolean | null | undefined | MessagePreferencesDefaultArgs> = $Result.GetResult<Prisma.$MessagePreferencesPayload, S>
+
+  type MessagePreferencesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MessagePreferencesFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MessagePreferencesCountAggregateInputType | true
+    }
+
+  export interface MessagePreferencesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MessagePreferences'], meta: { name: 'MessagePreferences' } }
+    /**
+     * Find zero or one MessagePreferences that matches the filter.
+     * @param {MessagePreferencesFindUniqueArgs} args - Arguments to find a MessagePreferences
+     * @example
+     * // Get one MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MessagePreferencesFindUniqueArgs>(args: SelectSubset<T, MessagePreferencesFindUniqueArgs<ExtArgs>>): Prisma__MessagePreferencesClient<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MessagePreferences that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MessagePreferencesFindUniqueOrThrowArgs} args - Arguments to find a MessagePreferences
+     * @example
+     * // Get one MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MessagePreferencesFindUniqueOrThrowArgs>(args: SelectSubset<T, MessagePreferencesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MessagePreferencesClient<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MessagePreferences that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagePreferencesFindFirstArgs} args - Arguments to find a MessagePreferences
+     * @example
+     * // Get one MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MessagePreferencesFindFirstArgs>(args?: SelectSubset<T, MessagePreferencesFindFirstArgs<ExtArgs>>): Prisma__MessagePreferencesClient<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MessagePreferences that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagePreferencesFindFirstOrThrowArgs} args - Arguments to find a MessagePreferences
+     * @example
+     * // Get one MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MessagePreferencesFindFirstOrThrowArgs>(args?: SelectSubset<T, MessagePreferencesFindFirstOrThrowArgs<ExtArgs>>): Prisma__MessagePreferencesClient<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MessagePreferences that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagePreferencesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.findMany()
+     * 
+     * // Get first 10 MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const messagePreferencesWithIdOnly = await prisma.messagePreferences.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MessagePreferencesFindManyArgs>(args?: SelectSubset<T, MessagePreferencesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MessagePreferences.
+     * @param {MessagePreferencesCreateArgs} args - Arguments to create a MessagePreferences.
+     * @example
+     * // Create one MessagePreferences
+     * const MessagePreferences = await prisma.messagePreferences.create({
+     *   data: {
+     *     // ... data to create a MessagePreferences
+     *   }
+     * })
+     * 
+     */
+    create<T extends MessagePreferencesCreateArgs>(args: SelectSubset<T, MessagePreferencesCreateArgs<ExtArgs>>): Prisma__MessagePreferencesClient<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MessagePreferences.
+     * @param {MessagePreferencesCreateManyArgs} args - Arguments to create many MessagePreferences.
+     * @example
+     * // Create many MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MessagePreferencesCreateManyArgs>(args?: SelectSubset<T, MessagePreferencesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MessagePreferences and returns the data saved in the database.
+     * @param {MessagePreferencesCreateManyAndReturnArgs} args - Arguments to create many MessagePreferences.
+     * @example
+     * // Create many MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MessagePreferences and only return the `id`
+     * const messagePreferencesWithIdOnly = await prisma.messagePreferences.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MessagePreferencesCreateManyAndReturnArgs>(args?: SelectSubset<T, MessagePreferencesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MessagePreferences.
+     * @param {MessagePreferencesDeleteArgs} args - Arguments to delete one MessagePreferences.
+     * @example
+     * // Delete one MessagePreferences
+     * const MessagePreferences = await prisma.messagePreferences.delete({
+     *   where: {
+     *     // ... filter to delete one MessagePreferences
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MessagePreferencesDeleteArgs>(args: SelectSubset<T, MessagePreferencesDeleteArgs<ExtArgs>>): Prisma__MessagePreferencesClient<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MessagePreferences.
+     * @param {MessagePreferencesUpdateArgs} args - Arguments to update one MessagePreferences.
+     * @example
+     * // Update one MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MessagePreferencesUpdateArgs>(args: SelectSubset<T, MessagePreferencesUpdateArgs<ExtArgs>>): Prisma__MessagePreferencesClient<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MessagePreferences.
+     * @param {MessagePreferencesDeleteManyArgs} args - Arguments to filter MessagePreferences to delete.
+     * @example
+     * // Delete a few MessagePreferences
+     * const { count } = await prisma.messagePreferences.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MessagePreferencesDeleteManyArgs>(args?: SelectSubset<T, MessagePreferencesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MessagePreferences.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagePreferencesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MessagePreferencesUpdateManyArgs>(args: SelectSubset<T, MessagePreferencesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MessagePreferences.
+     * @param {MessagePreferencesUpsertArgs} args - Arguments to update or create a MessagePreferences.
+     * @example
+     * // Update or create a MessagePreferences
+     * const messagePreferences = await prisma.messagePreferences.upsert({
+     *   create: {
+     *     // ... data to create a MessagePreferences
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MessagePreferences we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MessagePreferencesUpsertArgs>(args: SelectSubset<T, MessagePreferencesUpsertArgs<ExtArgs>>): Prisma__MessagePreferencesClient<$Result.GetResult<Prisma.$MessagePreferencesPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MessagePreferences.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagePreferencesCountArgs} args - Arguments to filter MessagePreferences to count.
+     * @example
+     * // Count the number of MessagePreferences
+     * const count = await prisma.messagePreferences.count({
+     *   where: {
+     *     // ... the filter for the MessagePreferences we want to count
+     *   }
+     * })
+    **/
+    count<T extends MessagePreferencesCountArgs>(
+      args?: Subset<T, MessagePreferencesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MessagePreferencesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MessagePreferences.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagePreferencesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MessagePreferencesAggregateArgs>(args: Subset<T, MessagePreferencesAggregateArgs>): Prisma.PrismaPromise<GetMessagePreferencesAggregateType<T>>
+
+    /**
+     * Group by MessagePreferences.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagePreferencesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MessagePreferencesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MessagePreferencesGroupByArgs['orderBy'] }
+        : { orderBy?: MessagePreferencesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MessagePreferencesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMessagePreferencesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MessagePreferences model
+   */
+  readonly fields: MessagePreferencesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MessagePreferences.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MessagePreferencesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MessagePreferences model
+   */ 
+  interface MessagePreferencesFieldRefs {
+    readonly id: FieldRef<"MessagePreferences", 'Int'>
+    readonly daysAhead0: FieldRef<"MessagePreferences", 'Boolean'>
+    readonly daysAhead1: FieldRef<"MessagePreferences", 'Boolean'>
+    readonly daysAhead2: FieldRef<"MessagePreferences", 'Boolean'>
+    readonly daysAhead3: FieldRef<"MessagePreferences", 'Boolean'>
+    readonly daysAhead7: FieldRef<"MessagePreferences", 'Boolean'>
+    readonly userId: FieldRef<"MessagePreferences", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MessagePreferences findUnique
+   */
+  export type MessagePreferencesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+    /**
+     * Filter, which MessagePreferences to fetch.
+     */
+    where: MessagePreferencesWhereUniqueInput
+  }
+
+  /**
+   * MessagePreferences findUniqueOrThrow
+   */
+  export type MessagePreferencesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+    /**
+     * Filter, which MessagePreferences to fetch.
+     */
+    where: MessagePreferencesWhereUniqueInput
+  }
+
+  /**
+   * MessagePreferences findFirst
+   */
+  export type MessagePreferencesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+    /**
+     * Filter, which MessagePreferences to fetch.
+     */
+    where?: MessagePreferencesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessagePreferences to fetch.
+     */
+    orderBy?: MessagePreferencesOrderByWithRelationInput | MessagePreferencesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MessagePreferences.
+     */
+    cursor?: MessagePreferencesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessagePreferences from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessagePreferences.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MessagePreferences.
+     */
+    distinct?: MessagePreferencesScalarFieldEnum | MessagePreferencesScalarFieldEnum[]
+  }
+
+  /**
+   * MessagePreferences findFirstOrThrow
+   */
+  export type MessagePreferencesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+    /**
+     * Filter, which MessagePreferences to fetch.
+     */
+    where?: MessagePreferencesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessagePreferences to fetch.
+     */
+    orderBy?: MessagePreferencesOrderByWithRelationInput | MessagePreferencesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MessagePreferences.
+     */
+    cursor?: MessagePreferencesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessagePreferences from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessagePreferences.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MessagePreferences.
+     */
+    distinct?: MessagePreferencesScalarFieldEnum | MessagePreferencesScalarFieldEnum[]
+  }
+
+  /**
+   * MessagePreferences findMany
+   */
+  export type MessagePreferencesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+    /**
+     * Filter, which MessagePreferences to fetch.
+     */
+    where?: MessagePreferencesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MessagePreferences to fetch.
+     */
+    orderBy?: MessagePreferencesOrderByWithRelationInput | MessagePreferencesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MessagePreferences.
+     */
+    cursor?: MessagePreferencesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MessagePreferences from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MessagePreferences.
+     */
+    skip?: number
+    distinct?: MessagePreferencesScalarFieldEnum | MessagePreferencesScalarFieldEnum[]
+  }
+
+  /**
+   * MessagePreferences create
+   */
+  export type MessagePreferencesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MessagePreferences.
+     */
+    data: XOR<MessagePreferencesCreateInput, MessagePreferencesUncheckedCreateInput>
+  }
+
+  /**
+   * MessagePreferences createMany
+   */
+  export type MessagePreferencesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MessagePreferences.
+     */
+    data: MessagePreferencesCreateManyInput | MessagePreferencesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MessagePreferences createManyAndReturn
+   */
+  export type MessagePreferencesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MessagePreferences.
+     */
+    data: MessagePreferencesCreateManyInput | MessagePreferencesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MessagePreferences update
+   */
+  export type MessagePreferencesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MessagePreferences.
+     */
+    data: XOR<MessagePreferencesUpdateInput, MessagePreferencesUncheckedUpdateInput>
+    /**
+     * Choose, which MessagePreferences to update.
+     */
+    where: MessagePreferencesWhereUniqueInput
+  }
+
+  /**
+   * MessagePreferences updateMany
+   */
+  export type MessagePreferencesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MessagePreferences.
+     */
+    data: XOR<MessagePreferencesUpdateManyMutationInput, MessagePreferencesUncheckedUpdateManyInput>
+    /**
+     * Filter which MessagePreferences to update
+     */
+    where?: MessagePreferencesWhereInput
+  }
+
+  /**
+   * MessagePreferences upsert
+   */
+  export type MessagePreferencesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MessagePreferences to update in case it exists.
+     */
+    where: MessagePreferencesWhereUniqueInput
+    /**
+     * In case the MessagePreferences found by the `where` argument doesn't exist, create a new MessagePreferences with this data.
+     */
+    create: XOR<MessagePreferencesCreateInput, MessagePreferencesUncheckedCreateInput>
+    /**
+     * In case the MessagePreferences was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MessagePreferencesUpdateInput, MessagePreferencesUncheckedUpdateInput>
+  }
+
+  /**
+   * MessagePreferences delete
+   */
+  export type MessagePreferencesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+    /**
+     * Filter which MessagePreferences to delete.
+     */
+    where: MessagePreferencesWhereUniqueInput
+  }
+
+  /**
+   * MessagePreferences deleteMany
+   */
+  export type MessagePreferencesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MessagePreferences to delete
+     */
+    where?: MessagePreferencesWhereInput
+  }
+
+  /**
+   * MessagePreferences without action
+   */
+  export type MessagePreferencesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MessagePreferences
+     */
+    select?: MessagePreferencesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessagePreferencesInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -2969,6 +4065,19 @@ export namespace Prisma {
   };
 
   export type ContactScalarFieldEnum = (typeof ContactScalarFieldEnum)[keyof typeof ContactScalarFieldEnum]
+
+
+  export const MessagePreferencesScalarFieldEnum: {
+    id: 'id',
+    daysAhead0: 'daysAhead0',
+    daysAhead1: 'daysAhead1',
+    daysAhead2: 'daysAhead2',
+    daysAhead3: 'daysAhead3',
+    daysAhead7: 'daysAhead7',
+    userId: 'userId'
+  };
+
+  export type MessagePreferencesScalarFieldEnum = (typeof MessagePreferencesScalarFieldEnum)[keyof typeof MessagePreferencesScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -3078,6 +4187,7 @@ export namespace Prisma {
     stripeId?: StringNullableFilter<"User"> | string | null
     email?: StringNullableFilter<"User"> | string | null
     contacts?: ContactListRelationFilter
+    messagePreferences?: XOR<MessagePreferencesNullableRelationFilter, MessagePreferencesWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -3089,6 +4199,7 @@ export namespace Prisma {
     stripeId?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
     contacts?: ContactOrderByRelationAggregateInput
+    messagePreferences?: MessagePreferencesOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -3103,6 +4214,7 @@ export namespace Prisma {
     stripeId?: StringNullableFilter<"User"> | string | null
     email?: StringNullableFilter<"User"> | string | null
     contacts?: ContactListRelationFilter
+    messagePreferences?: XOR<MessagePreferencesNullableRelationFilter, MessagePreferencesWhereInput> | null
   }, "id" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -3188,6 +4300,73 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Contact"> | string
   }
 
+  export type MessagePreferencesWhereInput = {
+    AND?: MessagePreferencesWhereInput | MessagePreferencesWhereInput[]
+    OR?: MessagePreferencesWhereInput[]
+    NOT?: MessagePreferencesWhereInput | MessagePreferencesWhereInput[]
+    id?: IntFilter<"MessagePreferences"> | number
+    daysAhead0?: BoolFilter<"MessagePreferences"> | boolean
+    daysAhead1?: BoolFilter<"MessagePreferences"> | boolean
+    daysAhead2?: BoolFilter<"MessagePreferences"> | boolean
+    daysAhead3?: BoolFilter<"MessagePreferences"> | boolean
+    daysAhead7?: BoolFilter<"MessagePreferences"> | boolean
+    userId?: StringFilter<"MessagePreferences"> | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type MessagePreferencesOrderByWithRelationInput = {
+    id?: SortOrder
+    daysAhead0?: SortOrder
+    daysAhead1?: SortOrder
+    daysAhead2?: SortOrder
+    daysAhead3?: SortOrder
+    daysAhead7?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type MessagePreferencesWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    userId?: string
+    AND?: MessagePreferencesWhereInput | MessagePreferencesWhereInput[]
+    OR?: MessagePreferencesWhereInput[]
+    NOT?: MessagePreferencesWhereInput | MessagePreferencesWhereInput[]
+    daysAhead0?: BoolFilter<"MessagePreferences"> | boolean
+    daysAhead1?: BoolFilter<"MessagePreferences"> | boolean
+    daysAhead2?: BoolFilter<"MessagePreferences"> | boolean
+    daysAhead3?: BoolFilter<"MessagePreferences"> | boolean
+    daysAhead7?: BoolFilter<"MessagePreferences"> | boolean
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type MessagePreferencesOrderByWithAggregationInput = {
+    id?: SortOrder
+    daysAhead0?: SortOrder
+    daysAhead1?: SortOrder
+    daysAhead2?: SortOrder
+    daysAhead3?: SortOrder
+    daysAhead7?: SortOrder
+    userId?: SortOrder
+    _count?: MessagePreferencesCountOrderByAggregateInput
+    _avg?: MessagePreferencesAvgOrderByAggregateInput
+    _max?: MessagePreferencesMaxOrderByAggregateInput
+    _min?: MessagePreferencesMinOrderByAggregateInput
+    _sum?: MessagePreferencesSumOrderByAggregateInput
+  }
+
+  export type MessagePreferencesScalarWhereWithAggregatesInput = {
+    AND?: MessagePreferencesScalarWhereWithAggregatesInput | MessagePreferencesScalarWhereWithAggregatesInput[]
+    OR?: MessagePreferencesScalarWhereWithAggregatesInput[]
+    NOT?: MessagePreferencesScalarWhereWithAggregatesInput | MessagePreferencesScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"MessagePreferences"> | number
+    daysAhead0?: BoolWithAggregatesFilter<"MessagePreferences"> | boolean
+    daysAhead1?: BoolWithAggregatesFilter<"MessagePreferences"> | boolean
+    daysAhead2?: BoolWithAggregatesFilter<"MessagePreferences"> | boolean
+    daysAhead3?: BoolWithAggregatesFilter<"MessagePreferences"> | boolean
+    daysAhead7?: BoolWithAggregatesFilter<"MessagePreferences"> | boolean
+    userId?: StringWithAggregatesFilter<"MessagePreferences"> | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -3197,6 +4376,7 @@ export namespace Prisma {
     stripeId?: string | null
     email?: string | null
     contacts?: ContactCreateNestedManyWithoutUserInput
+    messagePreferences?: MessagePreferencesCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -3208,6 +4388,7 @@ export namespace Prisma {
     stripeId?: string | null
     email?: string | null
     contacts?: ContactUncheckedCreateNestedManyWithoutUserInput
+    messagePreferences?: MessagePreferencesUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -3219,6 +4400,7 @@ export namespace Prisma {
     stripeId?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     contacts?: ContactUpdateManyWithoutUserNestedInput
+    messagePreferences?: MessagePreferencesUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -3230,6 +4412,7 @@ export namespace Prisma {
     stripeId?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     contacts?: ContactUncheckedUpdateManyWithoutUserNestedInput
+    messagePreferences?: MessagePreferencesUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -3314,6 +4497,72 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type MessagePreferencesCreateInput = {
+    daysAhead0?: boolean
+    daysAhead1?: boolean
+    daysAhead2?: boolean
+    daysAhead3?: boolean
+    daysAhead7?: boolean
+    user: UserCreateNestedOneWithoutMessagePreferencesInput
+  }
+
+  export type MessagePreferencesUncheckedCreateInput = {
+    id?: number
+    daysAhead0?: boolean
+    daysAhead1?: boolean
+    daysAhead2?: boolean
+    daysAhead3?: boolean
+    daysAhead7?: boolean
+    userId: string
+  }
+
+  export type MessagePreferencesUpdateInput = {
+    daysAhead0?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead1?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead2?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead3?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead7?: BoolFieldUpdateOperationsInput | boolean
+    user?: UserUpdateOneRequiredWithoutMessagePreferencesNestedInput
+  }
+
+  export type MessagePreferencesUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    daysAhead0?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead1?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead2?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead3?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead7?: BoolFieldUpdateOperationsInput | boolean
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type MessagePreferencesCreateManyInput = {
+    id?: number
+    daysAhead0?: boolean
+    daysAhead1?: boolean
+    daysAhead2?: boolean
+    daysAhead3?: boolean
+    daysAhead7?: boolean
+    userId: string
+  }
+
+  export type MessagePreferencesUpdateManyMutationInput = {
+    daysAhead0?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead1?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead2?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead3?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead7?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type MessagePreferencesUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    daysAhead0?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead1?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead2?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead3?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead7?: BoolFieldUpdateOperationsInput | boolean
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -3353,6 +4602,11 @@ export namespace Prisma {
     every?: ContactWhereInput
     some?: ContactWhereInput
     none?: ContactWhereInput
+  }
+
+  export type MessagePreferencesNullableRelationFilter = {
+    is?: MessagePreferencesWhereInput | null
+    isNot?: MessagePreferencesWhereInput | null
   }
 
   export type SortOrderInput = {
@@ -3527,6 +4781,57 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type MessagePreferencesCountOrderByAggregateInput = {
+    id?: SortOrder
+    daysAhead0?: SortOrder
+    daysAhead1?: SortOrder
+    daysAhead2?: SortOrder
+    daysAhead3?: SortOrder
+    daysAhead7?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type MessagePreferencesAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type MessagePreferencesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    daysAhead0?: SortOrder
+    daysAhead1?: SortOrder
+    daysAhead2?: SortOrder
+    daysAhead3?: SortOrder
+    daysAhead7?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type MessagePreferencesMinOrderByAggregateInput = {
+    id?: SortOrder
+    daysAhead0?: SortOrder
+    daysAhead1?: SortOrder
+    daysAhead2?: SortOrder
+    daysAhead3?: SortOrder
+    daysAhead7?: SortOrder
+    userId?: SortOrder
+  }
+
+  export type MessagePreferencesSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type ContactCreateNestedManyWithoutUserInput = {
     create?: XOR<ContactCreateWithoutUserInput, ContactUncheckedCreateWithoutUserInput> | ContactCreateWithoutUserInput[] | ContactUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ContactCreateOrConnectWithoutUserInput | ContactCreateOrConnectWithoutUserInput[]
@@ -3534,11 +4839,23 @@ export namespace Prisma {
     connect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
   }
 
+  export type MessagePreferencesCreateNestedOneWithoutUserInput = {
+    create?: XOR<MessagePreferencesCreateWithoutUserInput, MessagePreferencesUncheckedCreateWithoutUserInput>
+    connectOrCreate?: MessagePreferencesCreateOrConnectWithoutUserInput
+    connect?: MessagePreferencesWhereUniqueInput
+  }
+
   export type ContactUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ContactCreateWithoutUserInput, ContactUncheckedCreateWithoutUserInput> | ContactCreateWithoutUserInput[] | ContactUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ContactCreateOrConnectWithoutUserInput | ContactCreateOrConnectWithoutUserInput[]
     createMany?: ContactCreateManyUserInputEnvelope
     connect?: ContactWhereUniqueInput | ContactWhereUniqueInput[]
+  }
+
+  export type MessagePreferencesUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<MessagePreferencesCreateWithoutUserInput, MessagePreferencesUncheckedCreateWithoutUserInput>
+    connectOrCreate?: MessagePreferencesCreateOrConnectWithoutUserInput
+    connect?: MessagePreferencesWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -3567,6 +4884,16 @@ export namespace Prisma {
     deleteMany?: ContactScalarWhereInput | ContactScalarWhereInput[]
   }
 
+  export type MessagePreferencesUpdateOneWithoutUserNestedInput = {
+    create?: XOR<MessagePreferencesCreateWithoutUserInput, MessagePreferencesUncheckedCreateWithoutUserInput>
+    connectOrCreate?: MessagePreferencesCreateOrConnectWithoutUserInput
+    upsert?: MessagePreferencesUpsertWithoutUserInput
+    disconnect?: MessagePreferencesWhereInput | boolean
+    delete?: MessagePreferencesWhereInput | boolean
+    connect?: MessagePreferencesWhereUniqueInput
+    update?: XOR<XOR<MessagePreferencesUpdateToOneWithWhereWithoutUserInput, MessagePreferencesUpdateWithoutUserInput>, MessagePreferencesUncheckedUpdateWithoutUserInput>
+  }
+
   export type ContactUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ContactCreateWithoutUserInput, ContactUncheckedCreateWithoutUserInput> | ContactCreateWithoutUserInput[] | ContactUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ContactCreateOrConnectWithoutUserInput | ContactCreateOrConnectWithoutUserInput[]
@@ -3579,6 +4906,16 @@ export namespace Prisma {
     update?: ContactUpdateWithWhereUniqueWithoutUserInput | ContactUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ContactUpdateManyWithWhereWithoutUserInput | ContactUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ContactScalarWhereInput | ContactScalarWhereInput[]
+  }
+
+  export type MessagePreferencesUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<MessagePreferencesCreateWithoutUserInput, MessagePreferencesUncheckedCreateWithoutUserInput>
+    connectOrCreate?: MessagePreferencesCreateOrConnectWithoutUserInput
+    upsert?: MessagePreferencesUpsertWithoutUserInput
+    disconnect?: MessagePreferencesWhereInput | boolean
+    delete?: MessagePreferencesWhereInput | boolean
+    connect?: MessagePreferencesWhereUniqueInput
+    update?: XOR<XOR<MessagePreferencesUpdateToOneWithWhereWithoutUserInput, MessagePreferencesUpdateWithoutUserInput>, MessagePreferencesUncheckedUpdateWithoutUserInput>
   }
 
   export type UserCreateNestedOneWithoutContactsInput = {
@@ -3605,6 +4942,24 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type UserCreateNestedOneWithoutMessagePreferencesInput = {
+    create?: XOR<UserCreateWithoutMessagePreferencesInput, UserUncheckedCreateWithoutMessagePreferencesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMessagePreferencesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type UserUpdateOneRequiredWithoutMessagePreferencesNestedInput = {
+    create?: XOR<UserCreateWithoutMessagePreferencesInput, UserUncheckedCreateWithoutMessagePreferencesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMessagePreferencesInput
+    upsert?: UserUpsertWithoutMessagePreferencesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMessagePreferencesInput, UserUpdateWithoutMessagePreferencesInput>, UserUncheckedUpdateWithoutMessagePreferencesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -3756,6 +5111,19 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type ContactCreateWithoutUserInput = {
     name: string
     phoneNumber?: string | null
@@ -3777,6 +5145,28 @@ export namespace Prisma {
   export type ContactCreateManyUserInputEnvelope = {
     data: ContactCreateManyUserInput | ContactCreateManyUserInput[]
     skipDuplicates?: boolean
+  }
+
+  export type MessagePreferencesCreateWithoutUserInput = {
+    daysAhead0?: boolean
+    daysAhead1?: boolean
+    daysAhead2?: boolean
+    daysAhead3?: boolean
+    daysAhead7?: boolean
+  }
+
+  export type MessagePreferencesUncheckedCreateWithoutUserInput = {
+    id?: number
+    daysAhead0?: boolean
+    daysAhead1?: boolean
+    daysAhead2?: boolean
+    daysAhead3?: boolean
+    daysAhead7?: boolean
+  }
+
+  export type MessagePreferencesCreateOrConnectWithoutUserInput = {
+    where: MessagePreferencesWhereUniqueInput
+    create: XOR<MessagePreferencesCreateWithoutUserInput, MessagePreferencesUncheckedCreateWithoutUserInput>
   }
 
   export type ContactUpsertWithWhereUniqueWithoutUserInput = {
@@ -3806,6 +5196,34 @@ export namespace Prisma {
     userId?: StringFilter<"Contact"> | string
   }
 
+  export type MessagePreferencesUpsertWithoutUserInput = {
+    update: XOR<MessagePreferencesUpdateWithoutUserInput, MessagePreferencesUncheckedUpdateWithoutUserInput>
+    create: XOR<MessagePreferencesCreateWithoutUserInput, MessagePreferencesUncheckedCreateWithoutUserInput>
+    where?: MessagePreferencesWhereInput
+  }
+
+  export type MessagePreferencesUpdateToOneWithWhereWithoutUserInput = {
+    where?: MessagePreferencesWhereInput
+    data: XOR<MessagePreferencesUpdateWithoutUserInput, MessagePreferencesUncheckedUpdateWithoutUserInput>
+  }
+
+  export type MessagePreferencesUpdateWithoutUserInput = {
+    daysAhead0?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead1?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead2?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead3?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead7?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type MessagePreferencesUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    daysAhead0?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead1?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead2?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead3?: BoolFieldUpdateOperationsInput | boolean
+    daysAhead7?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type UserCreateWithoutContactsInput = {
     id?: string
     name?: string | null
@@ -3814,6 +5232,7 @@ export namespace Prisma {
     timeZone: string
     stripeId?: string | null
     email?: string | null
+    messagePreferences?: MessagePreferencesCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutContactsInput = {
@@ -3824,6 +5243,7 @@ export namespace Prisma {
     timeZone: string
     stripeId?: string | null
     email?: string | null
+    messagePreferences?: MessagePreferencesUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutContactsInput = {
@@ -3850,6 +5270,7 @@ export namespace Prisma {
     timeZone?: StringFieldUpdateOperationsInput | string
     stripeId?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    messagePreferences?: MessagePreferencesUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutContactsInput = {
@@ -3860,6 +5281,67 @@ export namespace Prisma {
     timeZone?: StringFieldUpdateOperationsInput | string
     stripeId?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
+    messagePreferences?: MessagePreferencesUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutMessagePreferencesInput = {
+    id?: string
+    name?: string | null
+    phone: string
+    paid?: boolean | null
+    timeZone: string
+    stripeId?: string | null
+    email?: string | null
+    contacts?: ContactCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutMessagePreferencesInput = {
+    id?: string
+    name?: string | null
+    phone: string
+    paid?: boolean | null
+    timeZone: string
+    stripeId?: string | null
+    email?: string | null
+    contacts?: ContactUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutMessagePreferencesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMessagePreferencesInput, UserUncheckedCreateWithoutMessagePreferencesInput>
+  }
+
+  export type UserUpsertWithoutMessagePreferencesInput = {
+    update: XOR<UserUpdateWithoutMessagePreferencesInput, UserUncheckedUpdateWithoutMessagePreferencesInput>
+    create: XOR<UserCreateWithoutMessagePreferencesInput, UserUncheckedCreateWithoutMessagePreferencesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMessagePreferencesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMessagePreferencesInput, UserUncheckedUpdateWithoutMessagePreferencesInput>
+  }
+
+  export type UserUpdateWithoutMessagePreferencesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    paid?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    timeZone?: StringFieldUpdateOperationsInput | string
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    contacts?: ContactUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMessagePreferencesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    paid?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    timeZone?: StringFieldUpdateOperationsInput | string
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    contacts?: ContactUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ContactCreateManyUserInput = {
@@ -3906,6 +5388,10 @@ export namespace Prisma {
      * @deprecated Use ContactDefaultArgs instead
      */
     export type ContactArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ContactDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MessagePreferencesDefaultArgs instead
+     */
+    export type MessagePreferencesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MessagePreferencesDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

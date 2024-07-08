@@ -137,6 +137,16 @@ exports.Prisma.ContactScalarFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.MessagePreferencesScalarFieldEnum = {
+  id: 'id',
+  daysAhead0: 'daysAhead0',
+  daysAhead1: 'daysAhead1',
+  daysAhead2: 'daysAhead2',
+  daysAhead3: 'daysAhead3',
+  daysAhead7: 'daysAhead7',
+  userId: 'userId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -155,7 +165,8 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Contact: 'Contact'
+  Contact: 'Contact',
+  MessagePreferences: 'MessagePreferences'
 };
 
 /**

@@ -1,7 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-    output   = "./generated/client"
-
+  output   = "./generated/client"
 }
 
 datasource db {
@@ -11,21 +10,33 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  name      String?
-  phone     String    @unique
-  paid  Boolean?
-  contacts  Contact[]
-  timeZone   String
-  stripeId  String?
-  email     String?
+  id                   String               @id @default(cuid())
+  name                 String?
+  phone                String               @unique
+  paid                 Boolean?
+  contacts             Contact[]
+  timeZone             String
+  stripeId             String?
+  email                String?
+  messagePreferences   MessagePreferences?
 }
 
 model Contact {
-  id          Int       @id @default(autoincrement()) 
+  id          Int       @id @default(autoincrement())
   name        String
   phoneNumber String?
   birthday    DateTime
   userId      String
   user        User      @relation(fields: [userId], references: [id])
+}
+
+model MessagePreferences {
+  id         Int     @id @default(autoincrement())
+  daysAhead0 Boolean @default(false)
+  daysAhead1 Boolean @default(false)
+  daysAhead2 Boolean @default(false)
+  daysAhead3 Boolean @default(false)
+  daysAhead7 Boolean @default(false)
+  user       User    @relation(fields: [userId], references: [id])
+  userId     String  @unique
 }

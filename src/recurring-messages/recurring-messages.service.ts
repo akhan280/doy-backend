@@ -1,26 +1,21 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { PrismaService } from '../prisma/prisma.service';
-import * as moment from 'moment-timezone';
+;
 import { Resend } from 'resend';
+import * as moment from 'moment-timezone';
+import { DataService } from '../data/data.service';
 import { Contact, User } from '../../prisma/generated/client';
-import { createClient } from 'redis';
+
 
 @Injectable()
 export class RecurringMessagesService {
   private readonly logger = new Logger(RecurringMessagesService.name);
   private resend = new Resend(process.env.RESEND_KEY);
-  private redisClient = createClient({ url: process.env.REDIS_URL });
 
-  constructor(private prisma: PrismaService) {
-    this.redisClient.connect()
-      .then(() => this.logger.log('Connected to Redis'))
-      .catch((error) => this.logger.error('Failed to connect to Redis', error));
-  }
+  constructor(private dataService: DataService) {}
 
   private async sendTextMessage(user: User, contact: Contact, content: string) {
     this.logger.log(`Preparing to send text message to ${user.name} for ${contact.name}'s birthday`);
-
     try {
         const response = await fetch(`${process.env.MESSAGE_SERVER}/api/v1/chat/new?password=Hyperfan2024`, {
           method: 'POST',
@@ -47,68 +42,33 @@ export class RecurringMessagesService {
     }
   }
 
-  private async getCachedBirthdays(dateKey: string): Promise<(User & { contacts: Contact[] })[]> {
-    this.logger.log(`Checking cache for birthdays with key: ${dateKey}`);
-    const cachedData = await this.redisClient.get(dateKey);
-    if (cachedData) {
-      this.logger.log(`Found cached birthdays for key: ${dateKey}`);
-    } else {
-      this.logger.log(`No cached birthdays found for key: ${dateKey}`);
-    }
-    this.logger.log(`cached data: ${cachedData}`);
-    return cachedData ? JSON.parse(cachedData) : null;
-  }
-
-  @Cron(CronExpression.EVERY_HOUR)
-  async sendMorningMessage() {
-    const today = new Date();
-    const todayKey = `birthdays:${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-
-    this.logger.log(`Starting sendMorningMessage job for ${today.toISOString()}`);
-
-    let users = await this.getCachedBirthdays(todayKey);
-
-    if (!users) {
-      this.logger.log(`No cached birthdays found. Querying database for today's birthdays.`);
-      users = await this.prisma.$queryRaw`
-        SELECT *
-        FROM "User"
-        WHERE EXISTS (
-          SELECT 1
-          FROM "Contact"
-          WHERE "Contact"."userId" = "User"."id"
-          AND EXTRACT(MONTH FROM "Contact"."birthday") = ${today.getMonth() + 1}
-          AND EXTRACT(DAY FROM "Contact"."birthday") = ${today.getDate()}
-        )
-      `;
-
-      this.logger.log(`Caching birthdays with key: ${todayKey}`);
-      await this.redisClient.set(todayKey, JSON.stringify(users), {
-        EX: 24 * 60 * 60, // Cache expires in 24 hours
-      });
-    }
+  private async sendMessagesForUpcomingBirthdays(daysAhead: number, contentCallback: (user: User, contact: Contact) => string) {
+    const users = await this.dataService.fetchUsersWithBirthdays(daysAhead);
 
     for (const user of users) {
       const userTime = moment().tz(user.timeZone);
-      if (userTime.hour() === 17) { 
-
-        // TODO: Create message sending protocol if we have only one contact to send to, or if we have multiple (the way we sound changes)
+      if (userTime.hour() === 17) { // Optimal time to send message
         for (const contact of user.contacts) {
           this.logger.log(`Sending birthday notification to ${user.name} for ${contact.name}'s birthday`);
-          
-          const birthDate = new Date(contact.birthday);
-          const today = new Date();
-          let age = today.getFullYear() - birthDate.getFullYear();
-          const monthDifference = today.getMonth() - birthDate.getMonth();
-          if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-          }
 
-          await this.sendTextMessage(user, contact, `Hey, there. just a reminder that today is ${contact.name}'s birthday. They're turning ${age}.`);
+          const messageContent = contentCallback(user, contact);
+          await this.sendTextMessage(user, contact, messageContent);
         }
       }
     }
+  }
 
-    this.logger.log(`Completed sendMorningMessage job for ${today.toISOString()}`);
+  @Cron(CronExpression.EVERY_HOUR)
+  async processBirthdayMessages() {
+    const today = new Date();
+    this.logger.log(`Starting processBirthdayMessages job for ${today.toISOString()}`);
+
+    await this.sendMessagesForUpcomingBirthdays(0, (user, contact) => `Hey, there. Just a reminder that today is ${contact.name}'s birthday.`);
+    await this.sendMessagesForUpcomingBirthdays(1, (user, contact) => `Hey, there. Just a reminder that tomorrow is ${contact.name}'s birthday.`);
+    await this.sendMessagesForUpcomingBirthdays(2, (user, contact) => `Hey, there. Just a reminder that in 2 days it's ${contact.name}'s birthday.`);
+    await this.sendMessagesForUpcomingBirthdays(3, (user, contact) => `Hey, there. Just a reminder that in 3 days it's ${contact.name}'s birthday.`);
+    await this.sendMessagesForUpcomingBirthdays(7, (user, contact) => `Hey, there. Just a reminder that in a week it's ${contact.name}'s birthday.`);
+
+    this.logger.log(`Completed processBirthdayMessages job for ${today.toISOString()}`);
   }
 }
