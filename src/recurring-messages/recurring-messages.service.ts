@@ -80,7 +80,7 @@ export class RecurringMessagesService {
     });
   }
 
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_HOUR)
   async sendMorningMessage() {
     const today = new Date();
     const todayKey = `birthdays:${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
