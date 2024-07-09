@@ -185,12 +185,15 @@ export class LlmAgentService {
         return this.managementService.changeTimezone(input, userId);
       case 'edit_cadence':
         return this.managementService.editCadence(input, userId);
-
+      case 'irrelevant':
+          return this.managementService.irrelevant();
+  
       // Sending Utils
       case 'stop_sending':
         return this.sendingService.stopSending(input, userId);
       case 'start_sending':
         return this.sendingService.startSending(input, userId);
+
       default:
         return { type: 'tool_result', output: 'Unknown tool' };
     }

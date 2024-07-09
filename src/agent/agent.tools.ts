@@ -13,7 +13,7 @@ export class BirthdayTools {
       input_schema: {
         type: 'object',
         properties: {
-          name: { type: 'string', description: 'Name of the person' },
+          name: { type: 'string', description: 'Name of the person. Make sure to capitalize both letters' },
           birthday: { type: 'string', description: 'Birthday' },
         },
         required: ['name', 'birthday'],
@@ -56,6 +56,9 @@ export class BirthdayTools {
   }
 
   async removeBirthday(input: { name: string }, userId: string): Promise<{ type: 'tool_result'; output: string }> {
+
+    // search for name, if name isn't found, message user back saying: "I didn't find anything, who out of these would you like to remove? and fetch all "
+
     await this.prisma.contact.deleteMany({
       where: {
         userId: userId,
@@ -86,7 +89,7 @@ export class SendingTools {
   public static tools: Tool[] = [
     {
       name: 'stop_sending',
-      description: 'Stop sending reminders to the user.',
+      description: 'Only use this function when the query indicates nothing but intent to stop recieving automated messages from you.',
       input_schema: { type: 'object', properties: {} },
     },
     {
@@ -124,6 +127,11 @@ export class ManagementTools {
       input_schema: { type: 'object', properties: {} },
     },
     {
+      name: 'irrelevant',
+      description: "Use when query does not fit into any of the categories provided",
+      input_schema: { type: 'object', properties: {} },
+    },
+    {
       name: 'change_timezone',
       description: "Change the user's timezone. Use this tool only when the user explicitly requests a timezone change. Ensure the timezone is in the 'Area/Location' format (e.g., 'America/New_York', 'Europe/London'). If the user provides a city or common abbreviation (e.g., EST, MST), infer the appropriate timezone. If unclear, ask for clarification. Accuracy is crucial as this affects future notifications and displays for the user. Do not mention internal tool names.",
       input_schema: {
@@ -146,6 +154,10 @@ export class ManagementTools {
       },
     },
   ];
+
+  async irrelevant(): Promise<{ type: 'tool_result'; output: string }> {
+    return { type: 'tool_result', output: 'Ignoring this message' };
+  }
 
   async unsubscribe(input: any, userId: string): Promise<{ type: 'tool_result'; output: string }> {
     await this.prisma.user.update({
