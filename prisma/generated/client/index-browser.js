@@ -147,6 +147,24 @@ exports.Prisma.MessagePreferencesScalarFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.ConversationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  role: 'role',
+  isUserMessage: 'isUserMessage',
+  conversationId: 'conversationId',
+  createdAt: 'createdAt',
+  functionCalled: 'functionCalled',
+  functionResult: 'functionResult'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -166,7 +184,9 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   User: 'User',
   Contact: 'Contact',
-  MessagePreferences: 'MessagePreferences'
+  MessagePreferences: 'MessagePreferences',
+  Conversation: 'Conversation',
+  Message: 'Message'
 };
 
 /**

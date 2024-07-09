@@ -19,6 +19,7 @@ model User {
   stripeId           String?
   email              String?
   messagePreferences MessagePreferences?
+  conversations      Conversation[]
 }
 
 model Contact {
@@ -39,4 +40,25 @@ model MessagePreferences {
   daysAhead7 Boolean @default(false)
   user       User    @relation(fields: [userId], references: [id])
   userId     String  @unique
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  content        String
+  role           String
+  isUserMessage  Boolean
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  createdAt      DateTime     @default(now())
+  functionCalled String?
+  functionResult String?
 }

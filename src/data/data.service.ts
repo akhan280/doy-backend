@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { createClient } from 'redis';
 import * as moment from 'moment-timezone';
-import { PrismaService } from './prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Contact, User } from '../../prisma/generated/client';
 
 

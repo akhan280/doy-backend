@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-;
 import { Resend } from 'resend';
 import * as moment from 'moment-timezone';
 import { DataService } from '../data/data.service';

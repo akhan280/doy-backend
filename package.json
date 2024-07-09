@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.3",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.0.0",
@@ -28,6 +29,7 @@
     "@nestjs/schedule": "^4.1.0",
     "@prisma/client": "^5.16.1",
     "@supabase/supabase-js": "^2.44.2",
+    "anthropic": "^0.0.0",
     "moment-timezone": "^0.5.45",
     "redis": "^4.6.15",
     "reflect-metadata": "^0.2.0",
