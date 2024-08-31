@@ -1,48 +1,50 @@
 import { Tool } from '@anthropic-ai/sdk/resources';
+import OpenAI from "openai";
 import { PrismaService } from '../prisma/prisma.service';
+import { error } from 'console';
 
 export const systemPrompt = "Before answering, explain your reasoning step-by-step in tags. You are an AI assistant for a birthday reminder service. Your job is to help users manage their birthdays and account settings. Whenever you experience confusion, make sure to ask the user a brief question specifically reminding them of the actions you can take, along with your preferred parameters You should never reveal internals of how you function. Do not mention function names, string, parameters or programming terms. Speak naturally but be brief. Do say you did an action unless the function is invoked. When analyzing whether you should call a function, please make sure to look at the context. If you get an irrelevant query ignore. Whenever you complete an action for the user ALWAYS structure it like this I _______ (verb in past tense) [get_subscription_status, edit_cadence, change_timezone, unsubscribe, start_sending, stop_sending, edit_birthday, remove_birthday, add_birthday] for you";
 
 export class BirthdayTools {
   constructor(private prisma: PrismaService) {}
 
-  public static tools: Tool[] = [
+  public static tools = [
     {
-      name: 'add_birthday',
-      description: 'Add a new birthday to the user\'s list. Use this when a user wants to add a birthday.',
-      input_schema: {
-        type: 'object',
+      name: "add_birthday",
+      description: "Add a new birthday to the user's list. Use this when a user wants to add a birthday.",
+      parameters: {
+        type: "object",
         properties: {
-          name: { type: 'string', description: 'Name of the person. Make sure to capitalize both letters' },
-          birthday: { type: 'string', description: 'Birthday' },
+          name: { type: "string", description: "Name of the person. Make sure to capitalize both letters" },
+          birthday: { type: "string", description: "Birthday" },
         },
-        required: ['name', 'birthday'],
+        required: ["name", "birthday"],
       },
     },
     {
-      name: 'remove_birthday',
-      description: 'Remove a birthday from the user\'s list. Use this when a user wants to remove a birthday.',
-      input_schema: {
-        type: 'object',
+      name: "remove_birthday",
+      description: "Remove a birthday from the user's list. Use this when a user wants to remove a birthday.",
+      parameters: {
+        type: "object",
         properties: {
-          name: { type: 'string', description: 'Name of the person to remove' },
+          name: { type: "string", description: "Name of the person to remove" },
         },
-        required: ['name'],
+        required: ["name"],
       },
     },
     {
-      name: 'edit_birthday',
-      description: 'Edit an existing birthday in the user\'s list. Use this when a user wants to change a birthday.',
-      input_schema: {
-        type: 'object',
+      name: "edit_birthday",
+      description: "Edit an existing birthday in the user's list. Use this when a user wants to change a birthday.",
+      parameters: {
+        type: "object",
         properties: {
-          name: { type: 'string', description: 'Name of the person' },
-          newBirthday: { type: 'string', description: 'New birthday in YYYY-MM-DD format' },
+          name: { type: "string", description: "Name of the person" },
+          newBirthday: { type: "string", description: "New birthday in YYYY-MM-DD format" },
         },
-        required: ['name', 'newBirthday'],
+        required: ["name", "newBirthday"],
       },
     },
-  ];
+  ]
 
   async addBirthday(input: { name: string; birthday: string }, userId: string): Promise<{ type: 'tool_result'; output: string }> {
     await this.prisma.contact.create({
@@ -56,9 +58,7 @@ export class BirthdayTools {
   }
 
   async removeBirthday(input: { name: string }, userId: string): Promise<{ type: 'tool_result'; output: string }> {
-
     // search for name, if name isn't found, message user back saying: "I didn't find anything, who out of these would you like to remove? and fetch all "
-
     await this.prisma.contact.deleteMany({
       where: {
         userId: userId,
@@ -86,18 +86,24 @@ export class BirthdayTools {
 export class SendingTools {
   constructor(private prisma: PrismaService) {}
 
-  public static tools: Tool[] = [
+  public static tools = [
     {
-      name: 'stop_sending',
-      description: 'Only use this function when the query indicates nothing but intent to stop recieving automated messages from you.',
-      input_schema: { type: 'object', properties: {} },
+      name: "stop_sending",
+      description: "Only use this function when the query indicates nothing but intent to stop receiving automated messages from you.",
+      parameters: {
+        type: "object",
+        properties: {},
+      },
     },
     {
-      name: 'start_sending',
-      description: 'Used to resume/start sending reminders to the user.',
-      input_schema: { type: 'object', properties: {} },
+      name: "start_sending",
+      description: "Used to resume/start sending reminders to the user.",
+      parameters: {
+        type: "object",
+        properties: {},
+      },
     },
-  ];
+  ]
 
   async stopSending(input: any, userId: string): Promise<{ type: 'tool_result'; output: string }> {
     await this.prisma.user.update({
@@ -120,40 +126,34 @@ export class SendingTools {
 export class ManagementTools {
   constructor(private prisma: PrismaService) {}
 
-  public static tools: Tool[] = [
+  public static tools = [
     {
-      name: 'unsubscribe',
-      description: 'Unsubscribe the user from the service.',
-      input_schema: { type: 'object', properties: {} },
-    },
-    {
-      name: 'irrelevant',
-      description: "Use when query does not fit into any of the categories provided",
-      input_schema: { type: 'object', properties: {} },
-    },
-    {
-      name: 'change_timezone',
+      name: "change_timezone",
       description: "Change the user's timezone. Use this tool only when the user explicitly requests a timezone change. Ensure the timezone is in the 'Area/Location' format (e.g., 'America/New_York', 'Europe/London'). If the user provides a city or common abbreviation (e.g., EST, MST), infer the appropriate timezone. If unclear, ask for clarification. Accuracy is crucial as this affects future notifications and displays for the user. Do not mention internal tool names.",
-      input_schema: {
-        type: 'object',
+      parameters: {
+        type: "object",
         properties: {
-          timezone: { type: 'string', description: 'New timezone (e.g., "America/New_York")' },
+          timezone: { type: "string", description: "New timezone (e.g., 'America/New_York')" },
         },
-        required: ['timezone'],
+        required: ["timezone"],
       },
     },
     {
-      name: 'edit_cadence',
-      description: 'Edit the general reminder cadence. The user must specify an interval from the following options: [1 day, 2 days, day of, 1 week, 3 days before]. Be strict about this format. Cadence changes apply to all users, not individuals. If the user refers to a specific person, confirm that they want to change the general cadence. Ignore references to specific users and modify the cadence according to the provided interval.      ',
-      input_schema: {
-        type: 'object',
+      name: "edit_cadence",
+      description: "Edit the general reminder cadence. The user must specify an interval from the following options: [1 day, 2 days, day of, 1 week, 3 days before]. Be strict about this format. Cadence changes apply to all users, not individuals. If the user refers to a specific person, confirm that they want to change the general cadence. Ignore references to specific users and modify the cadence according to the provided interval.",
+      parameters: {
+        type: "object",
         properties: {
-          cadence: { type: 'array', items: { type: 'number' }, description: 'Array of days ahead for reminders' },
+          cadence: { 
+            type: "array", 
+            items: { type: "number" }, 
+            description: "Array of days ahead for reminders" 
+          },
         },
-        required: ['cadence'],
+        required: ["cadence"],
       },
     },
-  ];
+  ]
 
   async irrelevant(): Promise<{ type: 'tool_result'; output: string }> {
     return { type: 'tool_result', output: 'Ignoring this message' };

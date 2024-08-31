@@ -5,6 +5,10 @@ import { Message, MessageParam, Tool, ToolUseBlock } from '@anthropic-ai/sdk/res
 import { BirthdayTools, ManagementTools, SendingTools, systemPrompt } from './agent.tools';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '../../prisma/generated/client';
+import openai, { OpenAI } from 'openai';
+import { ChatCompletionMessageParam, ChatCompletionTool } from 'openai/resources';
+
+const client = new OpenAI()
 
 @Injectable()
 export class LlmAgentService {
@@ -12,7 +16,7 @@ export class LlmAgentService {
   private birthdayService: BirthdayTools;
   private managementService: ManagementTools;
   private sendingService: SendingTools;
-  private tools: Tool[];
+  private tools: ChatCompletionTool[];
 
   constructor(private prisma: PrismaService) {
     this.anthropic = new Anthropic({
@@ -23,12 +27,23 @@ export class LlmAgentService {
     this.managementService = new ManagementTools(prisma);
     this.sendingService = new SendingTools(prisma);
     
-    this.tools = [
-      ...BirthdayTools.tools,
-      ...ManagementTools.tools,
-      ...SendingTools.tools,
-    ];
+    
+    const tools: ChatCompletionTool[] = [
+      ...BirthdayTools.tools.map(tool => ({
+        type: 'function' as const,
+        function: tool
+      })),
+      ...ManagementTools.tools.map(tool => ({
+        type: 'function' as const,
+        function: tool 
+      })),
+      ...SendingTools.tools.map(tool => ({
+        type: 'function' as const,
+        function: tool
+      }))
+    ];  
   }
+
 
   async processUserMessage(userMessage: string, userID: string): Promise<string> {
 
@@ -70,9 +85,9 @@ export class LlmAgentService {
       });
     }  
 
-    let contextMessages: MessageParam[] = [];
+    let contextMessages: ChatCompletionMessageParam[] = [];
     let messageCount = 0;
-    const maxContextMessages = 3; 
+    const maxContextMessages = 3;
   
     // Ensure strict alternation
     let expectedRole: 'user' | 'assistant' = 'assistant';  // Start with assistant as we'll add the new user message last
@@ -108,62 +123,65 @@ export class LlmAgentService {
 
     // ---- END FORMATTING CONTEXT -------
 
-    // ---- START ANTHROPIC GENERATION -----
+    // ---- START OPENAI GENERATION -----
     
     console.log('[CONTEXT MESSAGES] Messages before response', contextMessages);
 
-    const response = await this.anthropic.messages.create({
-      model: process.env.ANTHROPIC_MODEL,
-      max_tokens: 4096,
-      system: systemPrompt, 
-      messages: contextMessages,
-      tools: this.tools,
-      tool_choice: {"type": "any"},
-    });
+    // const response = await this.anthropic.messages.create({
+    //   model: process.env.ANTHROPIC_MODEL,
+    //   max_tokens: 4096,
+    //   system: systemPrompt, 
+    //   messages: contextMessages,
+    //   tools: this.tools,
+    //   tool_choice: {"type": "any"},
+    // });
 
-    console.log('[Agent] Stop Reason', response.stop_reason);
+    const completion = await client.chat.completions.create({model: "gpt-4o", messages: contextMessages, tools: this.tools})
+    const response = completion.choices[0]
+
+    console.log('[Agent] Stop Reason', response.finish_reason);
 
     contextMessages.push(
-      {"role": "assistant", "content": response.content}
+      {"role": "assistant", "content": response.message.content}
     )
 
     const assistantMessage = await this.prisma.message.create({
       data: {
         conversation: { connect: { id: conversation.id } },
         role: 'assistant',
-        content: response.content[0].type === 'text' ? response.content[0].text : JSON.stringify(response.content),
+        content: response.finish_reason === 'tool_calls' ? JSON.stringify(response.message.tool_calls) : response.message.content,
         isUserMessage: false,
       }
     });
 
-    if (response.stop_reason === 'tool_use') {
+    if (response.finish_reason === 'tool_calls') {
 
       console.log('[Agent] Tool_use triggered');
-      const toolUseBlock = response.content.find(block => block.type === 'tool_use') as ToolUseBlock;
-      console.log('[Agent] ToolUse Found', toolUseBlock);
+      const toolUseBlock = response.message.tool_calls[0];
+      const functionCall = toolUseBlock.function
+      
 
-      const result = await this.executeToolUse(toolUseBlock.name, toolUseBlock.input, userID);
+      const result = await this.executeToolUse(functionCall.name, functionCall.arguments, userID);
 
       await this.prisma.message.update({
         where: {id: assistantMessage.id},
         data: {
           content: JSON.stringify(toolUseBlock),
           isUserMessage: false,
-          functionCalled: toolUseBlock.name,
+          functionCalled: functionCall.name,
           functionResult: result.output,
         }
       });
 
-      contextMessages.push({ role: 'assistant', content: JSON.stringify(response.content) });
+      contextMessages.push({ role: 'assistant', content: JSON.stringify(response.message) });
       contextMessages.push({ role: 'user', content: JSON.stringify(result) });
 
       return JSON.stringify(result);
 
-    } else if (response.content[0].type === 'text') {
-      return response.content[0].text;
+    } else if (response.message.content) {
+      return response.message.content;
     }
-
-    return "Unexpected response format";
+    return `Unexpected response format ${response.finish_reason}`;
   }
 
   private async executeToolUse(toolName: string, input: any, userId: string): Promise<{ type: 'tool_result', output: string }> {

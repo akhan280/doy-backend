@@ -31,6 +31,7 @@
     "@supabase/supabase-js": "^2.44.2",
     "anthropic": "^0.0.0",
     "moment-timezone": "^0.5.45",
+    "openai": "^4.52.7",
     "redis": "^4.6.15",
     "reflect-metadata": "^0.2.0",
     "resend": "^3.4.0",
