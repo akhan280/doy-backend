@@ -11,6 +11,7 @@ export class BirthdayTools {
   public static tools = [
     {
       name: "add_birthday",
+      strict: true,
       description: "Add a new birthday to the user's list. Use this when a user wants to add a birthday.",
       parameters: {
         type: "object",
@@ -23,6 +24,7 @@ export class BirthdayTools {
     },
     {
       name: "remove_birthday",
+      strict: true,
       description: "Remove a birthday from the user's list. Use this when a user wants to remove a birthday.",
       parameters: {
         type: "object",
@@ -34,6 +36,7 @@ export class BirthdayTools {
     },
     {
       name: "edit_birthday",
+      strict: true,
       description: "Edit an existing birthday in the user's list. Use this when a user wants to change a birthday.",
       parameters: {
         type: "object",
@@ -89,6 +92,7 @@ export class SendingTools {
   public static tools = [
     {
       name: "stop_sending",
+      strict: true,
       description: "Only use this function when the query indicates nothing but intent to stop receiving automated messages from you.",
       parameters: {
         type: "object",
@@ -97,6 +101,7 @@ export class SendingTools {
     },
     {
       name: "start_sending",
+      strict: true,
       description: "Used to resume/start sending reminders to the user.",
       parameters: {
         type: "object",
@@ -129,6 +134,7 @@ export class ManagementTools {
   public static tools = [
     {
       name: "change_timezone",
+      strict: true,
       description: "Change the user's timezone. Use this tool only when the user explicitly requests a timezone change. Ensure the timezone is in the 'Area/Location' format (e.g., 'America/New_York', 'Europe/London'). If the user provides a city or common abbreviation (e.g., EST, MST), infer the appropriate timezone. If unclear, ask for clarification. Accuracy is crucial as this affects future notifications and displays for the user. Do not mention internal tool names.",
       parameters: {
         type: "object",
@@ -140,6 +146,7 @@ export class ManagementTools {
     },
     {
       name: "edit_cadence",
+      strict: true,
       description: "Edit the general reminder cadence. The user must specify an interval from the following options: [1 day, 2 days, day of, 1 week, 3 days before]. Be strict about this format. Cadence changes apply to all users, not individuals. If the user refers to a specific person, confirm that they want to change the general cadence. Ignore references to specific users and modify the cadence according to the provided interval.",
       parameters: {
         type: "object",

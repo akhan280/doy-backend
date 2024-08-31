@@ -19,9 +19,9 @@ export class LlmAgentService {
   private tools: ChatCompletionTool[];
 
   constructor(private prisma: PrismaService) {
-    this.anthropic = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
-    });
+    // this.anthropic = new Anthropic({
+    //   apiKey: process.env.ANTHROPIC_API_KEY,
+    // });
 
     this.birthdayService = new BirthdayTools(prisma);
     this.managementService = new ManagementTools(prisma);
@@ -136,7 +136,11 @@ export class LlmAgentService {
     //   tool_choice: {"type": "any"},
     // });
 
-    const completion = await client.chat.completions.create({model: "gpt-4o", messages: contextMessages, tools: this.tools})
+    const completion = await client.chat.completions.create({
+      model: process.env.OPENAI_MODEL, 
+      messages: contextMessages, 
+      tools: this.tools
+    })
     const response = completion.choices[0]
 
     console.log('[Agent] Stop Reason', response.finish_reason);
