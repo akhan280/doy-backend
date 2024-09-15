@@ -16,7 +16,7 @@ export class RecurringMessagesService {
   private async sendTextMessage(user: User, contact: Contact, content: string) {
     this.logger.log(`Preparing to send text message to ${user.name} for ${contact.name}'s birthday`);
     try {
-        const response = await fetch(`${process.env.MESSAGE_SERVER}/api/v1/chat/new?password=Hyperfan2024`, {
+        const response = await fetch(`${process.env.MESSAGE_SERVER}/api/v1/chat/new?password=Hyperfan20245`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
