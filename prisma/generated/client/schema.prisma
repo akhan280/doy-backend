@@ -1,6 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/client"
+  provider      = "prisma-client-js"
+  output        = "./generated/client"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -10,25 +11,53 @@ datasource db {
 }
 
 model User {
-  id                 String              @id @default(cuid())
-  name               String?
-  phone              String              @unique
-  paid               Boolean?
-  contacts           Contact[]
-  timeZone           String
-  stripeId           String?
-  email              String?
+  id       String    @id @default(cuid())
+  name     String?
+  phone    String    @unique
+  paid     Boolean?
+  contacts Contact[]
+  timeZone String
+  stripeId String?
+  email    String?
+  street   String?
+  city     String?
+  state    String?
+  zipCode  String?
+
   messagePreferences MessagePreferences?
   conversations      Conversation[]
+  orders             Order[]
 }
 
 model Contact {
-  id          Int      @id @default(autoincrement())
-  name        String
-  phoneNumber String?
-  birthday    DateTime
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  id             String   @id @default(cuid())
+  name           String
+  phoneNumber    String?
+  birthday       DateTime
+  userId         String
+  notify         Boolean  @default(false)
+  profilePicture Bytes?
+  street         String?
+  city           String?
+  state          String?
+  zipCode        String?
+  user           User     @relation(fields: [userId], references: [id])
+  orders         Order[]
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  userId          String
+  contactId       String
+  paymentIntentId String?  @unique
+  amount          Float?
+  currency        String?
+  status          String?
+  createdAt       DateTime @default(now())
+  orderInfo       Json?
+
+  user    User    @relation(fields: [userId], references: [id])
+  contact Contact @relation(fields: [contactId], references: [id])
 }
 
 model MessagePreferences {

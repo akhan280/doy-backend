@@ -126,7 +126,11 @@ exports.Prisma.UserScalarFieldEnum = {
   paid: 'paid',
   timeZone: 'timeZone',
   stripeId: 'stripeId',
-  email: 'email'
+  email: 'email',
+  street: 'street',
+  city: 'city',
+  state: 'state',
+  zipCode: 'zipCode'
 };
 
 exports.Prisma.ContactScalarFieldEnum = {
@@ -134,7 +138,25 @@ exports.Prisma.ContactScalarFieldEnum = {
   name: 'name',
   phoneNumber: 'phoneNumber',
   birthday: 'birthday',
-  userId: 'userId'
+  userId: 'userId',
+  notify: 'notify',
+  profilePicture: 'profilePicture',
+  street: 'street',
+  city: 'city',
+  state: 'state',
+  zipCode: 'zipCode'
+};
+
+exports.Prisma.OrderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  contactId: 'contactId',
+  paymentIntentId: 'paymentIntentId',
+  amount: 'amount',
+  currency: 'currency',
+  status: 'status',
+  createdAt: 'createdAt',
+  orderInfo: 'orderInfo'
 };
 
 exports.Prisma.MessagePreferencesScalarFieldEnum = {
@@ -170,6 +192,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -180,10 +207,17 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
   Contact: 'Contact',
+  Order: 'Order',
   MessagePreferences: 'MessagePreferences',
   Conversation: 'Conversation',
   Message: 'Message'

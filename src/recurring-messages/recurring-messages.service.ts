@@ -42,11 +42,13 @@ export class RecurringMessagesService {
   }
 
   private async sendMessagesForUpcomingBirthdays(daysAhead: number, contentCallback: (user: User, contact: Contact) => string) {
+    console.log("Fetching users for upcoming birthdays. Days ahead:", daysAhead)
     const users = await this.dataService.fetchUsersWithBirthdays(daysAhead);
+    console.log("Fetched users", users)
 
     for (const user of users) {
       const userTime = moment().tz(user.timeZone);
-      if (userTime.hour() === 17) { // Optimal time to send message
+      if (userTime.hour() === 21) { 
         for (const contact of user.contacts) {
           this.logger.log(`Sending birthday notification to ${user.name} for ${contact.name}'s birthday`);
 
@@ -57,7 +59,7 @@ export class RecurringMessagesService {
     }
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_MINUTE)
   async processBirthdayMessages() {
     const today = new Date();
     this.logger.log(`Starting processBirthdayMessages job for ${today.toISOString()}`);

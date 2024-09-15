@@ -33,20 +33,52 @@ export class DataService {
     const targetDate = moment().add(daysAhead, 'days');
     const dateKey = `birthdays:${targetDate.format('YYYY-MM-DD')}`;
 
+    // = await this.getCachedBirthdays(dateKey);
     let users = await this.getCachedBirthdays(dateKey);
 
     if (!users) {
       this.logger.log(`No cached birthdays found. Querying database for birthdays ${daysAhead} days ahead.`);
       users = await this.prisma.$queryRaw`
-        SELECT "User".*, "Contact".*
-        FROM "User"
-        JOIN "MessagePreferences" ON "User"."id" = "MessagePreferences"."userId"
-        JOIN "Contact" ON "User"."id" = "Contact"."userId"
-        WHERE 
-          EXTRACT(MONTH FROM "Contact"."birthday") = ${targetDate.month() + 1}
+      WITH filtered_contacts AS (
+        SELECT "Contact".*
+        FROM "Contact"
+        WHERE EXTRACT(MONTH FROM "Contact"."birthday") = ${targetDate.month() + 1}
           AND EXTRACT(DAY FROM "Contact"."birthday") = ${targetDate.date()}
-          AND "MessagePreferences"."daysAhead${daysAhead}" = true
-      `;
+      )
+      SELECT 
+        "User".*,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', fc.id,
+              'name', fc.name,
+              'phoneNumber', fc."phoneNumber",
+              'birthday', fc.birthday,
+              'userId', fc."userId",
+              'notify', fc.notify,
+              'profilePicture', fc."profilePicture",
+              'street', fc.street,
+              'city', fc.city,
+              'state', fc.state,
+              'zipCode', fc."zipCode"
+            )
+          ) FILTER (WHERE fc.id IS NOT NULL),
+          '[]'
+        ) as contacts
+      FROM "User"
+      JOIN "MessagePreferences" ON "User"."id" = "MessagePreferences"."userId"
+      LEFT JOIN filtered_contacts fc ON "User"."id" = fc."userId"
+      WHERE (
+        (${daysAhead} = 0 AND "MessagePreferences"."daysAhead0" = true) OR
+        (${daysAhead} = 1 AND "MessagePreferences"."daysAhead1" = true) OR
+        (${daysAhead} = 2 AND "MessagePreferences"."daysAhead2" = true) OR
+        (${daysAhead} = 3 AND "MessagePreferences"."daysAhead3" = true) OR
+        (${daysAhead} = 7 AND "MessagePreferences"."daysAhead7" = true)
+      )
+      GROUP BY "User"."id"
+    `;
+
+      console.log(users)
 
       this.logger.log(`Caching birthdays with key: ${dateKey}`);
       await this.redisClient.set(dateKey, JSON.stringify(users), {
